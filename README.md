@@ -1,7 +1,7 @@
 # nmk-decoder
 NMK Decoder
 
-Utility for decoding the GFX ROMs (backgrounds and sprites) of NMK games using the NMK-214 + NMK-215 based GFX encryption. Based on the related code of MAME driver nmk16.cpp
+Utility for decoding the GFX ROMs (backgrounds and sprites) of NMK games using the NMK-214 + NMK-215 based GFX encryption. Based on the related code of MAME driver [nmk16.cpp](https://github.com/mamedev/mame/blob/2ec9b81c46d256d2c157620c61837828bc5cda8a/src/mame/drivers/nmk16.cpp#L5233)
 
 Games using this are:
 * Macross
