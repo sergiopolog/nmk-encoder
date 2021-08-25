@@ -17,5 +17,7 @@ java -jar nmk-decoder.jar sprite|background encrypted_rom_file [output_file]
 
 It creates a new file with the decoded content.
 
+Requires Java 1.8 or newer.
+
 
 TO-DO: it works fine with background (tested decoding background rom of bjtwin set and it produces a identical result with background roms of unencrypted background roms of bjtwinp), but it doesn't work well with sprites, more investigation to be done...
