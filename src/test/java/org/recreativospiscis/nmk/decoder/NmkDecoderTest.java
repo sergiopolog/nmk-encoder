@@ -43,8 +43,8 @@ public class NmkDecoderTest extends TestCase {
 	}
 
 	public void testNmkDecoder_BG_bjtwin() throws IOException, URISyntaxException {
-		byte[] rom = this.getFile(BG_ROM_BJTWIN);
-		byte[] unencryptedRom = this.getFile(BG_ROM_BJTWIN_UNENCRYPTED);
+		byte[] rom = this.getFileContents(BG_ROM_BJTWIN);
+		byte[] unencryptedRom = this.getFileContents(BG_ROM_BJTWIN_UNENCRYPTED);
 
 		byte[] decodedRom = NmkDecoder.decodeBackgroundData(rom);
 
@@ -52,8 +52,8 @@ public class NmkDecoderTest extends TestCase {
 	}
 
 	public void testNmkDecoder_Sprite_bjtwin() throws IOException, URISyntaxException {
-		byte[] rom = this.getFile(SPRITE_ROM_BJTWIN_WORD_SWAPPED);
-		byte[] unencryptedRom = this.getFile(SPRITE_ROM_BJTWIN_UNENCRYPTED);
+		byte[] rom = this.getFileContents(SPRITE_ROM_BJTWIN_WORD_SWAPPED);
+		byte[] unencryptedRom = this.getFileContents(SPRITE_ROM_BJTWIN_UNENCRYPTED);
 
 		byte[] decodedRom = NmkDecoder.decodeSpriteData(rom);
 
@@ -61,8 +61,8 @@ public class NmkDecoderTest extends TestCase {
 	}
 
 	public void testNmkDecoder_BG_nouryoku() throws IOException, URISyntaxException {
-		byte[] rom = this.getFile(BG_ROM_NOURYOKU);
-		byte[] unencryptedRom = this.getFile(BG_ROM_NOURYOKU_UNENCRYPTED);
+		byte[] rom = this.getFileContents(BG_ROM_NOURYOKU);
+		byte[] unencryptedRom = this.getFileContents(BG_ROM_NOURYOKU_UNENCRYPTED);
 
 		byte[] decodedRom = NmkDecoder.decodeBackgroundData(rom);
 
@@ -70,15 +70,15 @@ public class NmkDecoderTest extends TestCase {
 	}
 
 	public void testNmkDecoder_Sprite_nouryoku() throws IOException, URISyntaxException {
-		byte[] rom = this.getFile(SPRITE_ROM_NOURYOKU_WORD_SWAPPED);
-		byte[] unencryptedRom = this.getFile(SPRITE_ROM_NOURYOKU_UNENCRYPTED);
+		byte[] rom = this.getFileContents(SPRITE_ROM_NOURYOKU_WORD_SWAPPED);
+		byte[] unencryptedRom = this.getFileContents(SPRITE_ROM_NOURYOKU_UNENCRYPTED);
 
 		byte[] decodedRom = NmkDecoder.decodeSpriteData(rom);
 
 		assertTrue("File decoded is not equal to original unencrypted.", Arrays.equals(unencryptedRom, decodedRom));
 	}
 
-	private byte[] getFile(String fileName) throws URISyntaxException, IOException {
+	private byte[] getFileContents(String fileName) throws URISyntaxException, IOException {
 		ClassLoader classLoader = this.getClass().getClassLoader();
 		URL resource = classLoader.getResource(fileName);
 		if (resource == null) {
