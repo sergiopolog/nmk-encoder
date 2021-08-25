@@ -12,7 +12,7 @@ Games using this are:
 
 Usage:
 ```
-java -jar nmk-decoder sprite|background encrypted_rom_file [output_file]
+java -jar nmk-decoder.jar sprite|background encrypted_rom_file [output_file]
 ```
 
 It creates a new file with the decoded content.
