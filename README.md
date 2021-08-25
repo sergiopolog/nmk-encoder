@@ -19,5 +19,8 @@ It creates a new file with the decoded content.
 
 Requires Java 1.8 or newer.
 
+NOTES:
+You need to take care of the word swapping that could be applied to the original encrypted roms (ROM_LOAD16_WORD_SWAP used in MAME for load the ROM). In that case, you need to byte-deinterleave the original rom and byte-interleave again in reverse order, previous to decode it using this tool.
 
-TO-DO: it works fine with background (tested decoding background rom of bjtwin set and it produces a identical result with background roms of unencrypted background roms of bjtwinp), but it doesn't work well with sprites, more investigation to be done...
+
+TO-DO: tested and working with bjtwin (compared results with unencrypted set bjtiwnp). Pending to test it in Nouryoku Koujou Iinkai
