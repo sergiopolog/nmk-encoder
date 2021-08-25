@@ -8,7 +8,7 @@ import java.nio.file.Paths;
  * NMK ROM DECODER
  *
  */
-public class App {
+public class NmkDecoder {
 
 	// @formatter:off
 	private final static byte[][] DECODE_DATA_BG = {
@@ -74,7 +74,7 @@ public class App {
 		Files.write(Paths.get(fileName), content);
 	}
 
-	private static byte[] decodeBackgroundData(byte[] rom) {
+	public static byte[] decodeBackgroundData(byte[] rom) {
 		byte[] decodedRom = new byte[rom.length];
 		for (int addr = 0; addr < rom.length; addr++) {
 			decodedRom[addr] = nmkDecodeByte(rom[addr], DECODE_DATA_BG[nmkAddressMap_bg0(addr)]);
@@ -82,7 +82,7 @@ public class App {
 		return decodedRom;
 	}
 
-	private static byte[] decodeSpriteData(byte[] rom) {
+	public static byte[] decodeSpriteData(byte[] rom) {
 		byte[] decodedRom = new byte[rom.length];
 		for (int addr = 0; addr < rom.length; addr += 2) {
 			int tmp = nmkDecodeWord((Byte.toUnsignedInt(rom[addr + 1]) * 256) + (Byte.toUnsignedInt(rom[addr])),

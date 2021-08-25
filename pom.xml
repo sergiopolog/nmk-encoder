@@ -6,12 +6,11 @@
 
   <groupId>org.recreativospiscis</groupId>
   <artifactId>nmk-decoder</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0.0</version>
 
   <name>nmk-decoder</name>
-  <description>A simple nmk-decoder.</description>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <description>NMK Decoder for decoding the GFX ROMs (backgrounds and sprites) of NMK games using the NMK-214 + NMK-215 based GFX encryption.</description>
+  <url>https://github.com/sergiopolog/nmk-decoder</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -58,14 +57,14 @@
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
           <configuration>
-					  <archive>
-						  <manifest>
-							  <mainClass>org.recreativospiscis.nmk.decoder.App</mainClass>
-                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-						  </manifest>
-					  </archive>
-				  </configuration>         
+		    <archive>
+			  <manifest>
+				<mainClass>org.recreativospiscis.nmk.decoder.NmkDecoder</mainClass>
+             	<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+             	<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+			  </manifest>
+		    </archive>
+		  </configuration>         
           <version>3.0.2</version>
         </plugin>
         <plugin>
