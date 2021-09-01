@@ -5,12 +5,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.recreativospiscis</groupId>
-  <artifactId>nmk-decoder</artifactId>
+  <artifactId>nmk-encoder</artifactId>
   <version>1.0.0</version>
 
   <name>nmk-decoder</name>
-  <description>NMK Decoder for decoding the GFX ROMs (backgrounds and sprites) of NMK games using the NMK-214 + NMK-215 based GFX encryption.</description>
-  <url>https://github.com/sergiopolog/nmk-decoder</url>
+  <description>NMK Encoder for encoding/decoding the GFX ROMs (backgrounds and sprites) of NMK games using the NMK-214 + NMK-215 based GFX encryption.</description>
+  <url>https://github.com/sergiopolog/nmk-encoder</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -34,10 +34,6 @@
           <version>3.1.0</version>
         </plugin>
         <plugin>
-          <artifactId>maven-site-plugin</artifactId>
-          <version>3.7.1</version>
-        </plugin>
-        <plugin>
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
@@ -59,7 +55,7 @@
           <configuration>
 		    <archive>
 			  <manifest>
-				<mainClass>org.recreativospiscis.nmk.decoder.NmkDecoder</mainClass>
+				<mainClass>org.recreativospiscis.nmk.decoder.NmkEncoder</mainClass>
              	<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
              	<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
 			  </manifest>

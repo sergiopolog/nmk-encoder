@@ -1,17 +1,24 @@
-package org.recreativospiscis.nmk.decoder;
+package org.recreativospiscis.nmk.encoder;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 /**
- * NMK ROM DECODER
- *
+ * NMK ROM ENCODER
  */
-public class NmkDecoder {
+public class NmkEncoder {
+
+	enum MODE {
+		encode, decode;
+	}
+
+	enum LAYER {
+		sprite, background;
+	}
 
 	// @formatter:off
-	private final static byte[][] DECODE_DATA_BG = {
+	private final static byte[][] DATA_SHIFT_BG = {
 			{ 0x3, 0x0, 0x7, 0x2, 0x5, 0x1, 0x4, 0x6 },
 			{ 0x1, 0x2, 0x6, 0x5, 0x4, 0x0, 0x3, 0x7 },
 			{ 0x7, 0x6, 0x5, 0x4, 0x3, 0x2, 0x1, 0x0 },
@@ -22,7 +29,7 @@ public class NmkDecoder {
 			{ 0x3, 0x4, 0x7, 0x6, 0x2, 0x0, 0x5, 0x1 }
 	};
 
-	private final static byte[][] DECODE_DATA_SPRITE = {
+	private final static byte[][] DATA_SHIFT_SPRITE = {
 			{ 0x9, 0x3, 0x4, 0x5, 0x7, 0x1, 0xb, 0x8, 0x0, 0xd, 0x2, 0xc, 0xe, 0x6, 0xf, 0xa },
 			{ 0x1, 0x3, 0xc, 0x4, 0x0, 0xf, 0xb, 0xa, 0x8, 0x5, 0xe, 0x6, 0xd, 0x2, 0x7, 0x9 },
 			{ 0xf, 0xe, 0xd, 0xc, 0xb, 0xa, 0x9, 0x8, 0x7, 0x6, 0x5, 0x4, 0x3, 0x2, 0x1, 0x0 },
@@ -36,26 +43,33 @@ public class NmkDecoder {
 	// @formatter:on
 
 	public static void main(String[] args) throws IOException {
-		if ((args.length == 2 || args.length == 3)
-				&& ("sprite".equals(args[0]) || "background".equals(args[0]) || "interleave".equals(args[0]))) {
-			String outputFilename = args.length == 3 ? args[2] : "decoded_" + args[1];
-			byte[] encodedRom = readFile(args[1]);
-			byte[] decodedRom = null;
-			switch (args[0]) {
-			case "sprite":
-				decodedRom = decodeSpriteData(encodedRom);
+		MODE mode = null;
+		LAYER layer = null;
+		try {
+			mode = args != null && args.length > 0 ? MODE.valueOf(args[0]) : null;
+			layer = args != null && args.length > 1 ? LAYER.valueOf(args[1]) : null;
+		} catch (IllegalArgumentException e) {
+			// do nothing
+		}
+		if ((args.length == 3 || args.length == 4) && mode != null && layer != null) {
+			String outputFilename = args.length == 4 ? args[3] : mode.toString() + "_" + args[2];
+			byte[] inputRom = readFile(args[2]);
+			byte[] outputRom = null;
+			switch (layer) {
+			case sprite:
+				outputRom = processSpriteData(mode, inputRom);
 				break;
-			case "background":
-				decodedRom = decodeBackgroundData(encodedRom);
+			case background:
+				outputRom = processBackgroundData(mode, inputRom);
 				break;
 			default:
 				break;
 			}
-			writeFile(outputFilename, decodedRom);
-			System.out.println("Successfully decoded rom into file: " + outputFilename);
+			writeFile(outputFilename, outputRom);
+			System.out.println("Successfully " + mode.toString() + " rom into file: " + outputFilename);
 		} else {
 			System.err.println(
-					"Invalid number of arguments. Usage: nmk-decoder.jar sprite|background input_filename [output_filename]");
+					"Invalid number of arguments. Usage: nmk-encoder.jar encode|decode sprite|background input_filename [output_filename]");
 			return;
 		}
 	}
@@ -74,23 +88,43 @@ public class NmkDecoder {
 		Files.write(Paths.get(fileName), content);
 	}
 
-	public static byte[] decodeBackgroundData(byte[] rom) {
-		byte[] decodedRom = new byte[rom.length];
+	public static byte[] processBackgroundData(MODE mode, byte[] rom) {
+		byte[] outputRom = new byte[rom.length];
 		for (int addr = 0; addr < rom.length; addr++) {
-			decodedRom[addr] = nmkDecodeByte(rom[addr], DECODE_DATA_BG[nmkAddressMap_bg0(addr)]);
+			switch (mode) {
+			case encode:
+				outputRom[addr] = nmkEncodeByte(rom[addr], DATA_SHIFT_BG[nmkAddressMap_bg0(addr)]);
+				break;
+			case decode:
+				outputRom[addr] = nmkDecodeByte(rom[addr], DATA_SHIFT_BG[nmkAddressMap_bg0(addr)]);
+				break;
+			default:
+				break;
+			}
 		}
-		return decodedRom;
+		return outputRom;
 	}
 
-	public static byte[] decodeSpriteData(byte[] rom) {
-		byte[] decodedRom = new byte[rom.length];
+	public static byte[] processSpriteData(MODE mode, byte[] rom) {
+		byte[] outputRom = new byte[rom.length];
 		for (int addr = 0; addr < rom.length; addr += 2) {
-			int tmp = nmkDecodeWord((Byte.toUnsignedInt(rom[addr + 1]) * 256) + (Byte.toUnsignedInt(rom[addr])),
-					DECODE_DATA_SPRITE[nmkAddressMap_sprites(addr)]);
-			decodedRom[addr + 1] = (byte) (tmp >> 8);
-			decodedRom[addr] = (byte) (tmp & 0xff);
+			int tmp = 0;
+			switch (mode) {
+			case encode:
+				tmp = nmkEncodeWord((Byte.toUnsignedInt(rom[addr + 1]) * 256) + (Byte.toUnsignedInt(rom[addr])),
+						DATA_SHIFT_SPRITE[nmkAddressMap_sprites(addr)]);
+				break;
+			case decode:
+				tmp = nmkDecodeWord((Byte.toUnsignedInt(rom[addr + 1]) * 256) + (Byte.toUnsignedInt(rom[addr])),
+						DATA_SHIFT_SPRITE[nmkAddressMap_sprites(addr)]);
+				break;
+			default:
+				break;
+			}
+			outputRom[addr + 1] = (byte) (tmp >> 8);
+			outputRom[addr] = (byte) (tmp & 0xff);
 		}
-		return decodedRom;
+		return outputRom;
 	}
 
 	private static int nmkAddressMap_bg0(int addr) {
@@ -109,10 +143,26 @@ public class NmkDecoder {
 		return ret;
 	}
 
+	private static byte nmkEncodeByte(byte src, byte[] bitp) {
+		byte ret = 0;
+		for (int i = 0; i < 8; i++) {
+			ret |= (((src >> (7 - i)) & 1) << bitp[i]);
+		}
+		return ret;
+	}
+
 	private static int nmkDecodeWord(int src, byte[] bitp) {
 		int ret = 0;
 		for (int i = 0; i < 16; i++) {
 			ret |= (((src >> Byte.toUnsignedInt(bitp[i])) & 1) << (15 - i));
+		}
+		return ret;
+	}
+
+	private static int nmkEncodeWord(int src, byte[] bitp) {
+		int ret = 0;
+		for (int i = 0; i < 16; i++) {
+			ret |= (((src >> (15 - i)) & 1) << Byte.toUnsignedInt(bitp[i]));
 		}
 		return ret;
 	}
