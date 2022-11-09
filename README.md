@@ -20,5 +20,5 @@ It creates a new file with the encoded/decoded content.
 Requires Java 1.8 or newer.
 
 NOTES:
-* You need to take care of the word swapping that could be applied to the original encrypted roms (ROM_LOAD16_WORD_SWAP used in MAME for load the ROM). In that case, you need to byte-deinterleave the original rom and byte-interleave again in reverse order, previous to decode it using this tool.
+* Sprite data rom is always byteswapped when loading in MAME. However, this tool takes care of it and outputs directly the decrypted data prepared to be fed into the sprite engine in the pcb, so there is no need to previous tweaking (deinterleave and interleave swapped) on the encrypted rom. Use directly the official dumped roms from MAME.
 * Tested with Bombjack Twin and Nouryoku Koujou Iinkai games, as both games have dumped romsets of both versions: "encrypted" and "unencrypted".
