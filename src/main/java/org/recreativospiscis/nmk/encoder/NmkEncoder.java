@@ -109,20 +109,24 @@ public class NmkEncoder {
 		byte[] outputRom = new byte[rom.length];
 		for (int addr = 0; addr < rom.length; addr += 2) {
 			int tmp = 0;
+			// here the original encrypted data is always byteswapped after encoding, so we need to
+			// deal with it differently when encoding or decoding:
 			switch (mode) {
 			case encode:
 				tmp = nmkEncodeWord((Byte.toUnsignedInt(rom[addr + 1]) * 256) + (Byte.toUnsignedInt(rom[addr])),
 						DATA_SHIFT_SPRITE[nmkAddressMap_sprites(addr)]);
+				outputRom[addr] = (byte) (tmp >> 8);
+				outputRom[addr + 1] = (byte) (tmp & 0xff);
 				break;
 			case decode:
-				tmp = nmkDecodeWord((Byte.toUnsignedInt(rom[addr + 1]) * 256) + (Byte.toUnsignedInt(rom[addr])),
+				tmp = nmkDecodeWord((Byte.toUnsignedInt(rom[addr]) * 256) + (Byte.toUnsignedInt(rom[addr + 1])),
 						DATA_SHIFT_SPRITE[nmkAddressMap_sprites(addr)]);
+				outputRom[addr + 1] = (byte) (tmp >> 8);
+				outputRom[addr] = (byte) (tmp & 0xff);
 				break;
 			default:
 				break;
 			}
-			outputRom[addr + 1] = (byte) (tmp >> 8);
-			outputRom[addr] = (byte) (tmp & 0xff);
 		}
 		return outputRom;
 	}

@@ -20,13 +20,13 @@ public class NmkEncoderTest extends TestCase {
 
 	private final static String BG_ROM_BJTWIN = "93087-4.bin";
 	private final static String BG_ROM_NOURYOKU = "ic32.4";
-	private final static String SPRITE_ROM_BJTWIN_WORD_SWAPPED = "93087-5_word_swap.bin";
-	private final static String SPRITE_ROM_NOURYOKU_WORD_SWAPPED = "ic100_word_swap.5";
+	private final static String SPRITE_ROM_BJTWIN = "93087-5.bin";
+	private final static String SPRITE_ROM_NOURYOKU = "ic100.5";
 
 	private final static String BG_ROM_BJTWIN_UNENCRYPTED = "mergedBg_bjtwinp.bin";
 	private final static String BG_ROM_NOURYOKU_UNENCRYPTED = "mergedBg_nouryokup.bin";
-	private final static String SPRITE_ROM_BJTWIN_UNENCRYPTED = "interleavedSprites_bjtwinp.bin";
-	private final static String SPRITE_ROM_NOURYOKU_UNENCRYPTED = "interleavedSprites_nouryokup.bin";
+	private final static String SPRITE_ROM_BJTWIN_UNENCRYPTED = "mergedSprites_bjtwinp.bin";
+	private final static String SPRITE_ROM_NOURYOKU_UNENCRYPTED = "mergedSprites_nouryokup.bin";
 
 	/**
 	 * Create the test case
@@ -55,7 +55,7 @@ public class NmkEncoderTest extends TestCase {
 
 	public void testEncodeNmk_Sprite_bjtwin() throws IOException, URISyntaxException {
 		byte[] rom = this.getFileContents(SPRITE_ROM_BJTWIN_UNENCRYPTED);
-		byte[] encryptedRom = this.getFileContents(SPRITE_ROM_BJTWIN_WORD_SWAPPED);
+		byte[] encryptedRom = this.getFileContents(SPRITE_ROM_BJTWIN);
 
 		byte[] encodedRom = NmkEncoder.processSpriteData(MODE.encode, rom);
 
@@ -73,7 +73,7 @@ public class NmkEncoderTest extends TestCase {
 
 	public void testEncodeNmk_Sprite_nouryoku() throws IOException, URISyntaxException {
 		byte[] rom = this.getFileContents(SPRITE_ROM_NOURYOKU_UNENCRYPTED);
-		byte[] encryptedRom = this.getFileContents(SPRITE_ROM_NOURYOKU_WORD_SWAPPED);
+		byte[] encryptedRom = this.getFileContents(SPRITE_ROM_NOURYOKU);
 
 		byte[] encodedRom = NmkEncoder.processSpriteData(MODE.encode, rom);
 
@@ -90,7 +90,7 @@ public class NmkEncoderTest extends TestCase {
 	}
 
 	public void testDecodeNmk_Sprite_bjtwin() throws IOException, URISyntaxException {
-		byte[] rom = this.getFileContents(SPRITE_ROM_BJTWIN_WORD_SWAPPED);
+		byte[] rom = this.getFileContents(SPRITE_ROM_BJTWIN);
 		byte[] unencryptedRom = this.getFileContents(SPRITE_ROM_BJTWIN_UNENCRYPTED);
 
 		byte[] decodedRom = NmkEncoder.processSpriteData(MODE.decode, rom);
@@ -108,7 +108,7 @@ public class NmkEncoderTest extends TestCase {
 	}
 
 	public void testDecodeNmk_Sprite_nouryoku() throws IOException, URISyntaxException {
-		byte[] rom = this.getFileContents(SPRITE_ROM_NOURYOKU_WORD_SWAPPED);
+		byte[] rom = this.getFileContents(SPRITE_ROM_NOURYOKU);
 		byte[] unencryptedRom = this.getFileContents(SPRITE_ROM_NOURYOKU_UNENCRYPTED);
 
 		byte[] decodedRom = NmkEncoder.processSpriteData(MODE.decode, rom);
