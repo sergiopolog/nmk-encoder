@@ -25,6 +25,8 @@ public class NmkEncoderTest extends TestCase {
 
 	private final static String BG_ROM_BJTWIN_UNENCRYPTED = "mergedBg_bjtwinp.bin";
 	private final static String BG_ROM_NOURYOKU_UNENCRYPTED = "mergedBg_nouryokup.bin";
+	// These are created by byteswapping the decrypted contents to simulate the
+	// original single file data:
 	private final static String SPRITE_ROM_BJTWIN_UNENCRYPTED = "mergedSprites_bjtwinp.bin";
 	private final static String SPRITE_ROM_NOURYOKU_UNENCRYPTED = "mergedSprites_nouryokup.bin";
 

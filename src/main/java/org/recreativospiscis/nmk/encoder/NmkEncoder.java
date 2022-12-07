@@ -109,24 +109,24 @@ public class NmkEncoder {
 		byte[] outputRom = new byte[rom.length];
 		for (int addr = 0; addr < rom.length; addr += 2) {
 			int tmp = 0;
-			// here the original encrypted data is always byteswapped after encoding, so we need to
-			// deal with it differently when encoding or decoding:
 			switch (mode) {
 			case encode:
-				tmp = nmkEncodeWord((Byte.toUnsignedInt(rom[addr + 1]) * 256) + (Byte.toUnsignedInt(rom[addr])),
+				// As we are setting original order (byteswapped) after decoding, here is also
+				// needed to byteswap again prior to encode: Odd byte | 2nd Even byte
+				tmp = nmkEncodeWord((Byte.toUnsignedInt(rom[addr]) << 8) + (Byte.toUnsignedInt(rom[addr + 1])),
 						DATA_SHIFT_SPRITE[nmkAddressMap_sprites(addr)]);
-				outputRom[addr] = (byte) (tmp >> 8);
-				outputRom[addr + 1] = (byte) (tmp & 0xff);
 				break;
 			case decode:
-				tmp = nmkDecodeWord((Byte.toUnsignedInt(rom[addr]) * 256) + (Byte.toUnsignedInt(rom[addr + 1])),
+				// Prior to decode, byteswap: Odd byte | 2nd Even byte
+				tmp = nmkDecodeWord((Byte.toUnsignedInt(rom[addr]) << 8) + (Byte.toUnsignedInt(rom[addr + 1])),
 						DATA_SHIFT_SPRITE[nmkAddressMap_sprites(addr)]);
-				outputRom[addr + 1] = (byte) (tmp >> 8);
-				outputRom[addr] = (byte) (tmp & 0xff);
 				break;
 			default:
 				break;
 			}
+			// After encoding/decoding, byteswap again to restore original order:
+			outputRom[addr] = (byte) (tmp >> 8);
+			outputRom[addr + 1] = (byte) (tmp & 0xff);
 		}
 		return outputRom;
 	}
